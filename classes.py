@@ -45,22 +45,22 @@ class Soul():
 class Hero(Soul):
     
     def __init__(self, name, title, health, mana, mana_regen_rate)
-        self.name = name
+        super().__init__(name)
         self.title = title
-        self.health = health
-        self.mana = mana
+        super().__init__(health)
+        super().__init__(mana)
         self.mana_regen_rate = mana_regen_rate
-        self.equipped_weapon = ''
-        self.learned_spell
+        self.equipped_weapon = None
+        self.learned_spell = None
 
     def known_as(self):
-        pass
+        return f'{self.name} the {self.title}'
 
     def equip(self, weapon):
-        pass
+        self.equipped_weapon = weapon
 
     def learn(self, spell):
-        pass
+        self.learned_spell = spell
 
 class Enemy(Soul):
     pass
