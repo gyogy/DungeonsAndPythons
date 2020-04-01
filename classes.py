@@ -6,28 +6,40 @@ class Soul():
         self.damage = damage
 
     def is_alive(self):
-        pass
+        if self.health > 0:
+            return True
+        else:
+            return False
 
     def can_cast(self):
         pass
 
     def get_health(self):
-        pass
+        return self.health
 
     def get_mana(self):
-        pass
+        return self.mana
 
-    def take_healing(self):
-        pass
+    def take_healing(self, healing):
+        
+        self.health += healing
+        if self.health > health:
+            self.health = health
 
-    def take_mana(self):
-        pass
+    def take_mana(self, rest):
+
+        self.mana += rest
+        if self.mana > mana:
+            self.mana = mana
 
     def attack(self, by):
         pass
 
     def take_damage(self, damage):
-        pass
+
+        self.health -= damage
+        if self.health < 0:
+            self.health = 0
 
 
 class Hero(Soul):
@@ -74,7 +86,7 @@ class Dungeon():
         self.treasure_on_map = []
         self.hero = None
         self.hero_position = 0
-        
+
     def load_map(self, map_path):
         pass
 
