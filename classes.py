@@ -1,9 +1,11 @@
 class Soul():
 
-    def __init__(self, health, mana, damage):
+    def __init__(self, health, mana, damage=0):
         self.health = health
         self.mana = mana
         self.damage = damage
+        self.weapon = None
+        self.spell = None
 
     def is_alive(self):
         if self.health > 0:
@@ -12,7 +14,18 @@ class Soul():
             return False
 
     def can_cast(self):
-        pass
+        if self.spell is None:
+            return False
+        elif self.spell.mana_cost > self.mana:
+            return False
+        else:
+            return True
+
+    def equip(self, weapon):
+        self.weapon = weapon
+
+    def learn(self, spell):
+        self.spell = spell
 
     def get_health(self):
         return self.health
@@ -21,10 +34,15 @@ class Soul():
         return self.mana
 
     def take_healing(self, healing):
-        
-        self.health += healing
-        if self.health > health:
-            self.health = health
+        if self.health > 0:
+
+            self.health += healing
+            if self.health > health:
+                self.health = health
+            return True
+
+        else:
+            return False
 
     def take_mana(self, rest):
 
@@ -32,8 +50,15 @@ class Soul():
         if self.mana > mana:
             self.mana = mana
 
-    def attack(self, by):
-        pass
+    def attack(self, by=''):
+        if by == 'weapon' and self.weapon is not None:
+            return self.weapon.damage
+        
+        elif by == 'magic' and self.spell is not None:
+            return self.spell.damage
+
+        else:
+            return self.damage
 
     def take_damage(self, damage):
 
@@ -44,26 +69,19 @@ class Soul():
 
 class Hero(Soul):
     
-    def __init__(self, name, title, health, mana, mana_regen_rate)
-        super().__init__(name)
+    def __init__(self, name, title, health, mana, mana_regen_rate):
+        self.name = name
         self.title = title
-        super().__init__(health)
-        super().__init__(mana)
+        super().__init__(health, mana)
         self.mana_regen_rate = mana_regen_rate
-        self.equipped_weapon = None
-        self.learned_spell = None
 
     def known_as(self):
         return f'{self.name} the {self.title}'
 
-    def equip(self, weapon):
-        self.equipped_weapon = weapon
-
-    def learn(self, spell):
-        self.learned_spell = spell
-
 class Enemy(Soul):
-    pass
+    
+    def __init__(self, health, mana, damage):
+        super().__init__(health, mana, damage)
 
 class Weapon():
     
