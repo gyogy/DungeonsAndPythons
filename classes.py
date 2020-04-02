@@ -106,14 +106,24 @@ class Dungeon():
         self.treasure_on_map = []
         self.enemies_on_map = []
         self.hero = None
-        self.hero_position = 0
+        self.hero_position = ()
 
     def print_map(self):
         for level in self.map:
             print(''.join(level))
 
     def spawn(self, hero):
-        pass
+        # TODO: test if hero is Hero instance
+        self.hero = hero
+
+        for i in range(0,len(self.map)):
+            for j in range(0,len(self.map[0])):
+                if self.map[i][j] == 'S':
+                    self.hero_position = (i,j)
+                    self.map[i][j] = 'H'
+                    return True
+        # When Hero moves from a square it becomes '.'
+        return False
 
     def move_hero(self):
         pass
@@ -129,5 +139,4 @@ class Fight():
     def __init__(self, hero, enemy):
         self.hero = hero
         self.enemy = enemy
-
 
