@@ -1,3 +1,5 @@
+from dungeons_utils import load_map
+
 class Soul():
 
     def __init__(self, health, mana, damage=0):
@@ -102,14 +104,13 @@ class Dungeon():
     def __init__(self, map_path):
         self.map = load_map(map_path)
         self.treasure_on_map = []
+        self.enemies_on_map = []
         self.hero = None
         self.hero_position = 0
 
-    def load_map(self, map_path):
-        pass
-
     def print_map(self):
-        pass
+        for level in self.map:
+            print(''.join(level))
 
     def spawn(self, hero):
         pass
@@ -128,3 +129,5 @@ class Fight():
     def __init__(self, hero, enemy):
         self.hero = hero
         self.enemy = enemy
+
+
