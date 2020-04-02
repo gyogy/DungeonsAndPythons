@@ -125,8 +125,96 @@ class Dungeon():
         # When Hero moves from a square it becomes '.'
         return False
 
-    def move_hero(self):
-        pass
+    def move_hero(self, direction):
+        if direction == 'up':
+            self.move_up()
+        elif direction == 'down':
+            self.move_down()
+        elif direction == 'left':
+            self.move_left()
+        elif direction == 'right':
+            self.move_right()
+        else:
+            raise ValueError('Invalid direction')
+
+    def move_up(self):
+        # future hero position 
+        fhp = (self.hero_position[0]-1,self.hero_position[1])
+        
+        if fhp[0] < 0:
+            return False
+        elif self.map[fhp[0]][fhp[1]] == '.':
+            self.map[fhp[0]][fhp[1]] = 'H'
+            self.map[fhp[0]+1][fhp[1]] = '.'
+            self.hero_position = fhp
+            return True
+        elif self.map[fhp[0]][fhp[1]] == '#':
+            return False
+        elif self.map[fhp[0]][fhp[1]] == 'E':
+            # start fight
+            pass
+        else:
+            # treasure function
+            pass
+
+
+    def move_down(self):
+        fhp = (self.hero_position[0]+1,self.hero_position[1])
+        
+        if fhp[0] > len(self.map) - 1 :
+            return False
+        elif self.map[fhp[0]][fhp[1]] == '.':
+            self.map[fhp[0]][fhp[1]] = 'H'
+            self.map[fhp[0]-1][fhp[1]] = '.'
+            self.hero_position = fhp
+            return True
+        elif self.map[fhp[0]][fhp[1]] == '#':
+            return False
+        elif self.map[fhp[0]][fhp[1]] == 'E':
+            # start fight
+            pass
+        else:
+            # treasure function
+            pass
+
+    def move_left(self):
+        fhp = (self.hero_position[0],self.hero_position[1]-1)
+        print(self.map[fhp[0]][fhp[1]])
+        if fhp[1] < 0:
+            return False
+        elif self.map[fhp[0]][fhp[1]] == '.':
+            self.map[fhp[0]][fhp[1]] = 'H'
+            self.map[fhp[0]][fhp[1]+1] = '.'
+            self.hero_position = fhp
+            return True
+        elif self.map[fhp[0]][fhp[1]] == '#':
+            return False
+        elif self.map[fhp[0]][fhp[1]] == 'E':
+            # start fight
+            pass
+        else:
+            # treasure function
+            pass
+
+    def move_right(self):
+        fhp = (self.hero_position[0], self.hero_position[1]+1)
+        
+        if fhp[1] > len(self.map) - 1 :
+            return False
+        elif self.map[fhp[0]][fhp[1]] == '.':
+            self.map[fhp[0]][fhp[1]] = 'H'
+            self.map[fhp[0]][fhp[1]-1] = '.'
+            self.hero_position = fhp
+            return True
+        elif self.map[fhp[0]][fhp[1]] == '#':
+            return False
+        elif self.map[fhp[0]][fhp[1]] == 'E':
+            # start fight
+            pass
+        else:
+            # treasure function
+            pass
+
 
     def pick_treasure(self):
         pass
