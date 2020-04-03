@@ -6,6 +6,7 @@ vrago = Enemy(100, 100, 20)
 weapon = Weapon('Sword of Bad Manners', 20)
 spell = Spell('Fireball', 60, 100, 3)
 
+
 class TestHeroClass(unittest.TestCase):
 
     def test_hero_init(self):
@@ -29,7 +30,7 @@ class TestHeroClass(unittest.TestCase):
         expected = 43
 
         self.assertEqual(result, expected)
-        
+
     def test_hero_can_cast(self):
         pesho.learn(spell)
 
@@ -46,6 +47,7 @@ class TestHeroClass(unittest.TestCase):
 
         self.assertEqual(result, expected)
 
+
 class TestEnenmyClass(unittest.TestCase):
 
     def test_unequipped_enemys_attack_method(self):
@@ -54,6 +56,7 @@ class TestEnenmyClass(unittest.TestCase):
         expected = 20
 
         self.assertEqual(result, expected)
+
 
 if __name__ == '__main__':
     unittest.main()
