@@ -1,0 +1,7 @@
+#..T
+T..S
+H..G
+--Treasures
+Spell, Fireball, 10, 2, 4
+Weapon, Axe, 4
+--Enemies
