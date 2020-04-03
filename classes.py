@@ -1,4 +1,4 @@
-from dungeons_utils import load_map, load_treasures
+from dungeons_utils import load_map, load_treasures, load_enemies
 import random
 
 
@@ -113,7 +113,7 @@ class Dungeon():
     def __init__(self, map_path):
         self.map = load_map(map_path)
         self.treasure_on_map = load_treasures(map_path)
-        self.enemies_on_map = []
+        self.enemies_on_map = self.creating_enemies_from_list(load_enemies(map_path))
         self.hero = None
         self.hero_position = ()
 
@@ -133,6 +133,13 @@ class Dungeon():
                     return True
         # When Hero moves from a square it becomes '.'
         return False
+
+    def creating_enemies_from_list(self, enemies_on_map):
+        enemies = []
+        for enemy in enemies_on_map:
+            enemies.append(Enemy(int(enemy[1]), int(enemy[2]), int(enemy[3])))
+
+        return enemies
 
     def move_hero(self, direction):
         if direction == 'up':
@@ -290,3 +297,4 @@ class Fight():
     def __init__(self, hero, enemy):
         self.hero = hero
         self.enemy = enemy
+

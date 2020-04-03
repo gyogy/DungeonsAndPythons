@@ -9,8 +9,3 @@ Spell, Iceball, 5, 2, 1
 Weapon, Axe, 10
 Heal, 10
 Mana, 10
---Enemies
-Enemy, 10, 20, 20
-Enemy, 30, 40, 20
-Enemy, 50, 30, 20
---EOG
