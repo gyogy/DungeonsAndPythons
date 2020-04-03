@@ -23,7 +23,7 @@ class Soul():
     def can_cast(self):
         if self.spell is None:
             return False
-        elif self.spell.mana_cost > self.mana:
+        elif self.spell.mana_cost > self.current_mana:
             return False
         else:
             return True
@@ -57,12 +57,25 @@ class Soul():
         if self.current_mana > self.mana:
             self.current_mana = self.mana
 
-    def attack(self, by=''):
-        if by == 'weapon' and self.weapon is not None:
+    def __hit_with_weapon(self):
+        if self.weapon is not None:
             return self.weapon.damage
+        else:
+            return self.damage
 
-        elif by == 'magic' and self.spell is not None:
+    def __hit_with_spell(self):
+        if self.can_cast():
+            self.current_mana -= self.spell.mana_cost
             return self.spell.damage
+        else:
+            return 'Outta mana!'
+
+    def attack(self, by=''):
+        if by == 'weapon':
+            return self.__hit_with_weapon()
+
+        elif by == 'magic':
+            return self.__hit_with_spell()
 
         else:
             return self.damage
@@ -290,3 +303,87 @@ class Fight():
     def __init__(self, hero, enemy):
         self.hero = hero
         self.enemy = enemy
+
+    def heros_turn(self):
+        if self.hero.weapon is None and self.hero.spell is None:
+            print(f'{self.hero.name} is unequiped and cannot attack!')
+
+        elif self.hero.spell.damage >= self.hero.weapon.damage:
+
+            if self.hero.can_cast():
+                dmg = self.hero.attack(by='magic')
+                self.enemy.take_damage(dmg)
+                print(f'{self.hero.name} casts {self.hero.spell.name}!')
+                print(f'Enemy has {self.enemy.current_health} health left.')
+
+            else:
+                dmg = self.hero.attack(by='weapon')
+                self.enemy.take_damage(dmg)
+                print(f'{self.hero.name} swings his {self.hero.weapon.name}!')
+                print(f'Enemy has {self.enemy.current_health} health left.')
+
+        else:
+            dmg = self.hero.attack(by='weapon')
+            self.enemy.take_damage(dmg)
+            print(f'{self.hero.name} swings his {self.hero.weapon.name}!')
+            print(f'Enemy has {self.enemy.current_health} health left.')
+
+    def baddies_turn(self):
+        if self.enemy.weapon is None and self.enemy.spell is None:
+            dmg = self.enemy.attack()
+            self.hero.take_damage(dmg)
+            print(f'    Enemy strikes {self.hero.name}!')
+            print(f'    {self.hero.name} has {self.hero.current_health} health left.')
+
+        elif self.enemy.spell.damage >= self.enemy.weapon.damage and self.enemy.spell.damage >= self.enemy.damage:
+            if self.enemy.can_cast():
+                dmg = self.enemy.attack(by='magic')
+                self.hero.take_damage(dmg)
+                print(f'    Enemy casts {self.enemy.spell.name}!')
+                print(f'    {self.hero.name} has {self.hero.current_health} health left.')
+
+            elif self.enemy.weapon.damage >= self.enemy.damage:
+                dmg = self.enemy.attack(by='weapon')
+                self.hero.take_damage(dmg)
+                print(f'    Enemy swings his {self.enemy.weapon.name}!')
+                print(f'    {self.hero.name} has {self.hero.current_health} health left.')
+
+            else:
+                dmg = self.enemy.attack()
+                self.hero.take_damage(dmg)
+                print(f'    Enemy strikes {self.hero.name}!')
+                print(f'    {self.hero.name} has {self.hero.current_health} health left.')
+
+        elif self.enemy.weapon.damage > self.enemy.spell.damage and self.enemy.weapon.damage >= self.enemy.damage:
+            dmg = self.enemy.attack(by='weapon')
+            self.hero.take_damage(dmg)
+            print(f'    Enemy swings his {self.enemy.weapon.name}!')
+            print(f'    {self.hero. name} has {self.hero.current_health} health left.')
+
+        else:
+            dmg = self.enemy.attack()
+            self.hero.take_damage(dmg)
+            print(f'    Enemy strikes {self.hero.name}!')
+            print(f'    {self.hero.name} has {self.hero.current_health} health left.')
+
+    def commence(self):
+
+        while self.hero.is_alive() and self.enemy.is_alive():
+            
+            self.heros_turn()
+
+            if not self.enemy.is_alive():
+                print('Ka-blaow!')
+                break
+
+            self.baddies_turn()
+
+        return 'He ded.'
+
+
+def main():
+    pass
+
+
+if __name__ == '__main__':
+    main()
