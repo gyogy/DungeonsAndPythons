@@ -1,10 +1,11 @@
 from dungeons_utils import load_map, load_treasures
 import random
 
+
 class Soul():
 
     def __init__(self, health, mana, damage=0):
-        #Added current_mana and current_health
+        # Added current_mana and current_health
         self.health = health
         self.current_health = health
         self.mana = mana
@@ -59,7 +60,7 @@ class Soul():
     def attack(self, by=''):
         if by == 'weapon' and self.weapon is not None:
             return self.weapon.damage
-        
+
         elif by == 'magic' and self.spell is not None:
             return self.spell.damage
 
@@ -74,7 +75,7 @@ class Soul():
 
 
 class Hero(Soul):
-    
+
     def __init__(self, name, title, health, mana, mana_regen_rate):
         self.name = name
         self.title = title
@@ -84,16 +85,19 @@ class Hero(Soul):
     def known_as(self):
         return f'{self.name} the {self.title}'
 
+
 class Enemy(Soul):
-    
+
     def __init__(self, health, mana, damage):
         super().__init__(health, mana, damage)
 
+
 class Weapon():
-    
+
     def __init__(self, name, damage):
         self.name = name
         self.damage = damage
+
 
 class Spell():
 
@@ -121,10 +125,10 @@ class Dungeon():
         # TODO: test if hero is Hero instance
         self.hero = hero
 
-        for i in range(0,len(self.map)):
-            for j in range(0,len(self.map[0])):
+        for i in range(0, len(self.map)):
+            for j in range(0, len(self.map[0])):
                 if self.map[i][j] == 'S':
-                    self.hero_position = (i,j)
+                    self.hero_position = (i, j)
                     self.map[i][j] = 'H'
                     return True
         # When Hero moves from a square it becomes '.'
@@ -143,14 +147,15 @@ class Dungeon():
             raise ValueError('Invalid direction')
 
     def move_up(self):
-        # future hero position 
-        fhp = (self.hero_position[0]-1,self.hero_position[1])
-        
+        # future hero position
+        fhp = (self.hero_position[0] - 1, self.hero_position[1])
+
         if fhp[0] < 0:
             return False
+
         elif self.map[fhp[0]][fhp[1]] == '.':
             self.map[fhp[0]][fhp[1]] = 'H'
-            self.map[fhp[0]+1][fhp[1]] = '.'
+            self.map[fhp[0] + 1][fhp[1]] = '.'
             self.hero_position = fhp
             self.hero.take_mana(self.hero.mana_regen_rate)
             return True
@@ -163,97 +168,110 @@ class Dungeon():
             print('Congratulations you have sucessfully make it throught this level')
         else:
             self.pick_treasure()
-            self.map[fhp[0]+1][fhp[1]] = '.'
+            self.map[fhp[0] + 1][fhp[1]] = '.'
             self.map[fhp[0]][fhp[1]] = 'H'
             self.hero_position = fhp
             self.hero.take_mana(self.hero.mana_regen_rate)
             pass
-
 
     def move_down(self):
-        fhp = (self.hero_position[0]+1,self.hero_position[1])
-        
-        if fhp[0] > len(self.map) - 1 :
+        fhp = (self.hero_position[0] + 1, self.hero_position[1])
+
+        if fhp[0] > len(self.map) - 1:
             return False
+
         elif self.map[fhp[0]][fhp[1]] == '.':
             self.map[fhp[0]][fhp[1]] = 'H'
-            self.map[fhp[0]-1][fhp[1]] = '.'
+            self.map[fhp[0] - 1][fhp[1]] = '.'
             self.hero_position = fhp
             self.hero.take_mana(self.hero.mana_regen_rate)
             return True
+
         elif self.map[fhp[0]][fhp[1]] == '#':
             return False
+
         elif self.map[fhp[0]][fhp[1]] == 'G':
             print('Congratulations you have sucessfully make it throught this level')
+
         elif self.map[fhp[0]][fhp[1]] == 'E':
             # start fight
             pass
+
         else:
             self.pick_treasure()
-            self.map[fhp[0]-1][fhp[1]] = '.'
+            self.map[fhp[0] - 1][fhp[1]] = '.'
             self.map[fhp[0]][fhp[1]] = 'H'
             self.hero_position = fhp
             self.hero.take_mana(self.hero.mana_regen_rate)
 
     def move_left(self):
-        fhp = (self.hero_position[0],self.hero_position[1]-1)
+        fhp = (self.hero_position[0], self.hero_position[1] - 1)
         print(self.map[fhp[0]][fhp[1]])
+
         if fhp[1] < 0:
             return False
+
         elif self.map[fhp[0]][fhp[1]] == '.':
             self.map[fhp[0]][fhp[1]] = 'H'
-            self.map[fhp[0]][fhp[1]+1] = '.'
+            self.map[fhp[0]][fhp[1] + 1] = '.'
             self.hero_position = fhp
             self.hero.take_mana(self.hero.mana_regen_rate)
             return True
+
         elif self.map[fhp[0]][fhp[1]] == 'G':
             print('Congratulations you have sucessfully make it throught this level')
+
         elif self.map[fhp[0]][fhp[1]] == '#':
             return False
+
         elif self.map[fhp[0]][fhp[1]] == 'E':
             # start fight
             pass
+
         else:
             self.pick_treasure()
-            self.map[fhp[0]][fhp[1]+1] = '.'
+            self.map[fhp[0]][fhp[1] + 1] = '.'
             self.map[fhp[0]][fhp[1]] = 'H'
             self.hero_position = fhp
             self.hero.take_mana(self.hero.mana_regen_rate)
 
     def move_right(self):
-        fhp = (self.hero_position[0], self.hero_position[1]+1)
-        
-        if fhp[1] > len(self.map) - 1 :
+        fhp = (self.hero_position[0], self.hero_position[1] + 1)
+
+        if fhp[1] > len(self.map) - 1:
             return False
+
         elif self.map[fhp[0]][fhp[1]] == '.':
             self.map[fhp[0]][fhp[1]] = 'H'
-            self.map[fhp[0]][fhp[1]-1] = '.'
+            self.map[fhp[0]][fhp[1] - 1] = '.'
             self.hero_position = fhp
             return True
+
         elif self.map[fhp[0]][fhp[1]] == '#':
             return False
+
         elif self.map[fhp[0]][fhp[1]] == 'G':
             print('Congratulations you have sucessfully make it throught this level')
+
         elif self.map[fhp[0]][fhp[1]] == 'E':
             # start fight
             pass
         else:
             self.pick_treasure()
-            self.map[fhp[0]][fhp[1]-1] = '.'
+            self.map[fhp[0]][fhp[1] - 1] = '.'
             self.map[fhp[0]][fhp[1]] = 'H'
             self.hero_position = fhp
             self.hero.take_mana(self.hero.mana_regen_rate)
-
 
     def pick_treasure(self):
         treasure = random.choice(self.treasure_on_map)
 
         if treasure[0] == 'Spell':
             print(f'New spell learned: {treasure[1]}')
-            self.hero.learn(Spell(treasure[1],int(treasure[2]),int(treasure[3]),int(treasure[4])))
+            self.hero.learn(Spell(treasure[1], int(treasure[2]), int(treasure[3]), int(treasure[4])))
         elif treasure[0] == 'Weapon':
             print(f'New weapon equiped: {treasure[1]}')
-            self.hero.equip(Weapon(treasure[1],int(treasure[2])))
+            self.hero.equip(Weapon(treasure[1], int(treasure[2])))
         elif treasure[0] == 'Heal':
             print(f'Heal potion found! +{treasure[1]}hp')
             self.hero.take_healing(int(treasure[1]))
@@ -266,10 +284,9 @@ class Dungeon():
     def hero_attack(self, by):
         pass
 
+
 class Fight():
 
     def __init__(self, hero, enemy):
         self.hero = hero
         self.enemy = enemy
-
-
