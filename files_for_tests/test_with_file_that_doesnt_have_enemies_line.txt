@@ -1,0 +1,6 @@
+S..T
+K..O
+--Treasures
+Spell, Fireball, 10, 4, 2
+Spell, Cannonball, 12, 14, 6
+
