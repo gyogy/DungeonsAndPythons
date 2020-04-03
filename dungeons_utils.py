@@ -16,6 +16,13 @@ def load_map(map_path):
     return dungeon_map
 
 
+def check_if_dungeon_map_has_forbidden_symbols(dungeon_map):
+    for level in dungeon_map:
+        for square in level:
+            if(square != 'S' or square != 'H' or square != 'T' or square != 'E' or square != '.' or square != '#'):
+                raise ValueError('Invalid character on the map')
+
+
 # Splits line from file to to list of chars
 def split_line(word):
     return [char for char in word]
