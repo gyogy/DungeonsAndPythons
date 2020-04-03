@@ -13,4 +13,3 @@ Mana, 10
 Enemy, 10, 20, 20
 Enemy, 30, 40, 20
 Enemy, 50, 30, 20
---EOG
