@@ -24,9 +24,9 @@ def load_treasures(map_path):
         pass
 
     treasure = file.readline().split(', ')
-    while treasure != ['--Enemies']:
+
+    while(treasure != ['--Enemies\n']):
         treasures.append(treasure)
         treasure = file.readline().split(', ')
-    
-    return treasures
 
+    return treasures

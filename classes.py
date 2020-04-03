@@ -4,14 +4,17 @@ import random
 class Soul():
 
     def __init__(self, health, mana, damage=0):
+        #Added current_mana and current_health
         self.health = health
+        self.current_health = health
         self.mana = mana
+        self.current_mana = mana
         self.damage = damage
         self.weapon = None
         self.spell = None
 
     def is_alive(self):
-        if self.health > 0:
+        if self.current_health > 0:
             return True
         else:
             return False
@@ -31,26 +34,27 @@ class Soul():
         self.spell = spell
 
     def get_health(self):
-        return self.health
+        return self.current_health
 
     def get_mana(self):
-        return self.mana
+        return self.current_mana
 
     def take_healing(self, healing):
-        if self.health > 0:
-
-            self.health += healing
-            if self.health > health:
-                self.health = health
+        if self.current_health > 0:
+            # Made changes
+            self.current_health += healing
+            if self.current_health > self.health:
+                self.current_health = self.health
             return True
 
         else:
             return False
 
     def take_mana(self, rest):
-        self.mana += rest
-        if self.mana > mana:
-            self.mana = mana
+        # Mada changes
+        self.current_mana += rest
+        if self.current_mana > self.mana:
+            self.current_mana = self.mana
 
     def attack(self, by=''):
         if by == 'weapon' and self.weapon is not None:
@@ -64,9 +68,9 @@ class Soul():
 
     def take_damage(self, damage):
 
-        self.health -= damage
-        if self.health < 0:
-            self.health = 0
+        self.current_health -= damage
+        if self.current_health < 0:
+            self.current_health = 0
 
 
 class Hero(Soul):
@@ -246,16 +250,16 @@ class Dungeon():
 
         if treasure[0] == 'Spell':
             print(f'New spell learned: {treasure[1]}')
-            self.hero.learn(Spell(treasure[1],int(treasure[2]),int(treasure[3]),int(treasure[4][0:-2])))
+            self.hero.learn(Spell(treasure[1],int(treasure[2]),int(treasure[3]),int(treasure[4])))
         elif treasure[0] == 'Weapon':
             print(f'New weapon equiped: {treasure[1]}')
-            self.hero.equip(Weapon(treasure[1],int(treasure[2][0:-2])))
+            self.hero.equip(Weapon(treasure[1],int(treasure[2])))
         elif treasure[0] == 'Heal':
-            print(f'Heal potion found! +{treasure[1][0:-2]}hp')
-            self.hero.take_healing(int(treasure[1][0:-2]))
+            print(f'Heal potion found! +{treasure[1]}hp')
+            self.hero.take_healing(int(treasure[1]))
         elif treasure[0] == 'Mana':
-            print(f'Mana potion found! +{treasure[1][0:-2]}mana')
-            self.hero.take_mana(int(treasure[1][0:-2]))
+            print(f'Mana potion found! +{treasure[1]}mana')
+            self.hero.take_mana(int(treasure[1]))
         else:
             raise ValueError('Invalid treasure type')
 
@@ -267,4 +271,5 @@ class Fight():
     def __init__(self, hero, enemy):
         self.hero = hero
         self.enemy = enemy
+
 
