@@ -11,20 +11,22 @@ def load_map(map_path):
             dungeon_level = dungeon_level[0:-1]
         dungeon_map.append(dungeon_level)
         dungeon_level = split_line(file.readline())
-        
-    file.close()
-    return dungeon_map        
 
-# Splits line from file to to list of chars 
+    file.close()
+    return dungeon_map
+
+
+# Splits line from file to to list of chars
 def split_line(word):
     return [char for char in word]
+
 
 def load_treasures(map_path):
     file = open(map_path, "r")
     treasures = []
     treasure = file.readline().split(', ')
     while(treasure != ['--Treasures\n']):
-        #Reaching end of the file without Treasure line found
+        # Reaching end of the file without Treasure line found
         if treasure == ['']:
             raise ValueError('Incorrect format of file(No --Treasures)')
         treasure = file.readline().split(', ')
