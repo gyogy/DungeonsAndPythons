@@ -149,8 +149,17 @@ class Dungeon():
         return False
 
     def respawn(self, hero):
-        pass
-        '''when hero.is_alive() is False, this function should run.
+        self.hero = hero
+
+        for i in range(0, len(self.map)):
+            for j in range(0, len(self.map[0])):
+                if self.map[i][j] == 'S':
+                    self.hero_position = (i, j)
+                    self.map[i][j] = 'H'
+                    return f'{self.hero.name} the {self.hero.title} has been respawned!'
+        # When Hero moves from a square it becomes '.'
+        return 'GAME OVER!'
+        '''TODO: when hero.is_alive() is False, this function should run.
         It should search the map for Ss and respawn the hero at the nearest one,
         or throw a GAME OVER if there are no more Ss on the map.
         Corrner case: Ss should be blocked by enemies.'''
@@ -203,12 +212,9 @@ class Dungeon():
                 # removing vanquished enemy from dungeon's list of enemies
                 self.enemies_on_map.remove(self.enemies_on_map[0])
 
-                return True
             else:
                 print(f'{self.hero.name} has been killed!')
-                self.hero.current_health = 0
-                # d.respawn(self.hero)
-                return False
+                print(self.respawn(self.hero))
 
         elif self.map[fhp[0]][fhp[1]] == 'G':
             print('Congratulations you have sucessfully made it throught this level')
