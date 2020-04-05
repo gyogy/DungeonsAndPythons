@@ -1,5 +1,10 @@
 import unittest
-from dungeons_utils import split_line, load_map, load_treasures, check_if_dungeon_map_has_forbidden_symbols, load_enemies
+from dungeons_utils import (
+    split_line,
+    load_map,
+    load_treasures,
+    check_if_dungeon_map_has_forbidden_symbols,
+    load_enemies)
 
 
 class TestSplitLine(unittest.TestCase):

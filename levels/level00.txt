@@ -1,0 +1,10 @@
+#S#
+#.#
+#E#
+#.#
+#G#
+--Treasures
+Weapon, Axe, 10
+--Enemies
+Enemy, 30, 1, 10
+--EOG
