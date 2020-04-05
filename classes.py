@@ -352,8 +352,8 @@ class Dungeon():
 
                 # removing vanquished enemy from dungeon's list of enemies
                 self.enemies_on_map.remove(self.enemies_on_map[0])
-
                 return True
+
             else:
                 print(f'{self.hero.name} has been killed!')
                 # d.respawn(self.hero)
@@ -385,8 +385,48 @@ class Dungeon():
         else:
             raise ValueError('Invalid treasure type')
 
-    def hero_attack(self, by):
-        pass
+    def hero_attack(self, by='magic', direction='right'):
+        if by == 'magic':
+
+            if self.hero.can_cast():
+                rng = self.hero.spell.cast_range
+                xy = self.hero_position
+
+                if direction == 'right':
+
+                    for i in range(1, rng + 1):
+
+                        if self.map[xy[0]][xy[1] + i] == 'E':
+                            f = Fight(self.hero, self.enemies_on_map[0], i)
+                            result = f.commence()
+
+                            if result:
+                                print('Enemy vanquished!')
+                                self.map[xy[0]][xy[1] + i] = '.'
+                                # removing vanquished enemy from dungeon's list of enemies
+                                self.enemies_on_map.remove(self.enemies_on_map[0])
+                                return True
+
+                            else:
+                                print(f'{self.hero.name} has been killed!')
+                                # d.respawn(self.hero)
+                                return False
+
+                        else:
+                            return 'Noone in range.'
+
+                elif direction == 'down':
+                    pass
+
+                elif direction == 'left':
+                    pass
+
+                else:
+                    pass
+            elif self.hero.spell is None:
+                print(f'{self.hero.name} doesn\'t know any spells.')
+            else:
+                print(f'{self.hero.name} is out of mana.')
 
 
 class Fight():
@@ -400,7 +440,7 @@ class Fight():
 
         if self.hero.can_cast():
 
-            if self.hero.weapon is None or self.hero.spell.damage >= self.hero.weapon.damage:
+            if self.hero.weapon is None or self.hero.spell.damage >= self.hero.weapon.damage or self.distance > 0:
                 dmg = self.hero.attack(by='magic')
                 self.enemy.take_damage(dmg)
                 print(f'{self.hero.name} casts {self.hero.spell.name}!')
