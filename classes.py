@@ -391,9 +391,10 @@ class Dungeon():
 
 class Fight():
 
-    def __init__(self, hero, enemy):
+    def __init__(self, hero, enemy, distance=0):
         self.hero = hero
         self.enemy = enemy
+        self.distance = distance
 
     def heros_turn(self):
 
@@ -428,46 +429,52 @@ class Fight():
                 print(f'Enemy has {self.enemy.current_health} health left.')
 
     def baddies_turn(self):
+        if self.distance == 0:
 
-        if self.enemy.can_cast():
+            if self.enemy.can_cast():
 
-            if self.enemy.weapon is None and self.enemy.spell.damage >= self.enemy.damage:
-                dmg = self.enemy.attack(by='magic')
-                self.hero.take_damage(dmg)
-                print(f'    Enemy casts {self.enemy.spell.name}!')
-                print(f'    {self.hero.name} has {self.hero.current_health} health left.')
+                if self.enemy.weapon is None and self.enemy.spell.damage >= self.enemy.damage:
+                    dmg = self.enemy.attack(by='magic')
+                    self.hero.take_damage(dmg)
+                    print(f'    Enemy casts {self.enemy.spell.name}!')
+                    print(f'    {self.hero.name} has {self.hero.current_health} health left.')
 
-            elif self.enemy.spell.damage >= self.enemy.weapon and self.enemy.spell.damage >= self.enemy.damage:
-                dmg = self.enemy.attack(by='magic')
-                self.hero.take_damage(dmg)
-                print(f'    Enemy casts {self.enemy.spell.name}!')
-                print(f'    {self.hero.name} has {self.hero.current_health} health left.')
+                elif self.enemy.spell.damage >= self.enemy.weapon and self.enemy.spell.damage >= self.enemy.damage:
+                    dmg = self.enemy.attack(by='magic')
+                    self.hero.take_damage(dmg)
+                    print(f'    Enemy casts {self.enemy.spell.name}!')
+                    print(f'    {self.hero.name} has {self.hero.current_health} health left.')
 
-            elif self.enemy.weapon.damage >= self.enemy.damage:
-                dmg = self.enemy.attack(by='weapon')
-                self.hero.take_damage(dmg)
-                print(f'    Enemy swings his {self.enemy.weapon.name}!')
-                print(f'    {self.hero.name} has {self.hero.current_health} health left.')
+                elif self.enemy.weapon.damage >= self.enemy.damage:
+                    dmg = self.enemy.attack(by='weapon')
+                    self.hero.take_damage(dmg)
+                    print(f'    Enemy swings his {self.enemy.weapon.name}!')
+                    print(f'    {self.hero.name} has {self.hero.current_health} health left.')
+
+                else:
+                    dmg = self.enemy.attack()
+                    self.hero.take_damage(dmg)
+                    print(f'    Enemy strikes {self.hero.name}!')
+                    print(f'    {self.hero.name} has {self.hero.current_health} health left.')
 
             else:
-                dmg = self.enemy.attack()
-                self.hero.take_damage(dmg)
-                print(f'    Enemy strikes {self.hero.name}!')
-                print(f'    {self.hero.name} has {self.hero.current_health} health left.')
+
+                if self.enemy.weapon is not None and self.enemy.weapon.damage >= self.enemy.damage:
+                    dmg = self.enemy.attack(by='weapon')
+                    self.hero.take_damage(dmg)
+                    print(f'    Enemy swings his {self.enemy.weapon.name}!')
+                    print(f'    {self.hero.name} has {self.hero.current_health} health left.')
+
+                else:
+                    dmg = self.enemy.attack()
+                    self.hero.take_damage(dmg)
+                    print(f'    Enemy strikes {self.hero.name}!')
+                    print(f'    {self.hero.name} has {self.hero.current_health} health left.')
 
         else:
-
-            if self.enemy.weapon is not None and self.enemy.weapon.damage >= self.enemy.damage:
-                dmg = self.enemy.attack(by='weapon')
-                self.hero.take_damage(dmg)
-                print(f'    Enemy swings his {self.enemy.weapon.name}!')
-                print(f'    {self.hero.name} has {self.hero.current_health} health left.')
-
-            else:
-                dmg = self.enemy.attack()
-                self.hero.take_damage(dmg)
-                print(f'    Enemy strikes {self.hero.name}!')
-                print(f'    {self.hero.name} has {self.hero.current_health} health left.')
+            self.distance -= 1
+            print(f'    Enemy moves towards {self.hero.name} to get in range.')
+            print(f'    He\'s {self.distance} tiles away.')
 
     def commence(self):
 
