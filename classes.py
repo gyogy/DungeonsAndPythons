@@ -71,10 +71,10 @@ class Soul():
             return 'Outta mana!'
 
     def attack(self, by=''):
-        if by == 'weapon':
+        if by == 'weapon' and self.weapon is not None:
             return self.__hit_with_weapon()
 
-        elif by == 'magic':
+        elif by == 'magic' and self.can_cast():
             return self.__hit_with_spell()
 
         else:
@@ -107,9 +107,10 @@ class Enemy(Soul):
 
 class Weapon():
 
-    def __init__(self, name, damage):
+    def __init__(self, name, damage, hit_range=1):
         self.name = name
         self.damage = damage
+        self.hit_range = hit_range
 
 
 class Spell():
@@ -147,6 +148,13 @@ class Dungeon():
         # When Hero moves from a square it becomes '.'
         return False
 
+    def respawn(self, hero):
+        pass
+        '''when hero.is_alive() is False, this function should run.
+        It should search the map for Ss and respawn the hero at the nearest one,
+        or throw a GAME OVER if there are no more Ss on the map.
+        Corrner case: Ss should be blocked by enemies.'''
+
     def creating_enemies_from_list(self, enemies_on_map):
         enemies = []
         for enemy in enemies_on_map:
@@ -182,10 +190,28 @@ class Dungeon():
         elif self.map[fhp[0]][fhp[1]] == '#':
             return False
         elif self.map[fhp[0]][fhp[1]] == 'E':
-            # start fight
-            pass
+            f = Fight(self.hero, self.enemies_on_map[0])
+            result = f.commence()
+
+            if result:
+                print('Enemy vanquished!')
+                # moving Hero to enemies position after victory
+                self.map[fhp[0]][fhp[1]] = 'H'
+                self.map[fhp[0] + 1][fhp[1]] = '.'
+                self.hero_position = fhp
+
+                # removing vanquished enemy from dungeon's list of enemies
+                self.enemies_on_map.remove(self.enemies_on_map[0])
+
+                return True
+            else:
+                print(f'{self.hero.name} has been killed!')
+                self.hero.current_health = 0
+                # d.respawn(self.hero)
+                return False
+
         elif self.map[fhp[0]][fhp[1]] == 'G':
-            print('Congratulations you have sucessfully make it throught this level')
+            print('Congratulations you have sucessfully made it throught this level')
         else:
             self.pick_treasure()
             self.map[fhp[0] + 1][fhp[1]] = '.'
@@ -214,8 +240,25 @@ class Dungeon():
             print('Congratulations you have sucessfully make it throught this level')
 
         elif self.map[fhp[0]][fhp[1]] == 'E':
-            # start fight
-            pass
+            f = Fight(self.hero, self.enemies_on_map[0])
+            result = f.commence()
+
+            if result:
+                print('Enemy vanquished!')
+                # moving Hero to enemies position after victory
+                self.map[fhp[0]][fhp[1]] = 'H'
+                self.map[fhp[0] - 1][fhp[1]] = '.'
+                self.hero_position = fhp
+
+                # removing vanquished enemy from dungeon's list of enemies
+                self.enemies_on_map.remove(self.enemies_on_map[0])
+
+                return True
+            else:
+                print(f'{self.hero.name} has been killed!')
+                self.hero.current_health = 0
+                # d.respawn(self.hero)
+                return False
 
         else:
             self.pick_treasure()
@@ -245,8 +288,25 @@ class Dungeon():
             return False
 
         elif self.map[fhp[0]][fhp[1]] == 'E':
-            # start fight
-            pass
+            f = Fight(self.hero, self.enemies_on_map[0])
+            result = f.commence()
+
+            if result:
+                print('Enemy vanquished!')
+                # moving Hero to enemies position after victory
+                self.map[fhp[0]][fhp[1]] = 'H'
+                self.map[fhp[0]][fhp[1] + 1] = '.'
+                self.hero_position = fhp
+
+                # removing vanquished enemy from dungeon's list of enemies
+                self.enemies_on_map.remove(self.enemies_on_map[0])
+
+                return True
+            else:
+                print(f'{self.hero.name} has been killed!')
+                self.hero.current_health = 0
+                # d.respawn(self.hero)
+                return False
 
         else:
             self.pick_treasure()
@@ -258,7 +318,7 @@ class Dungeon():
     def move_right(self):
         fhp = (self.hero_position[0], self.hero_position[1] + 1)
 
-        if fhp[1] > len(self.map) - 1:
+        if fhp[1] > len(self.map[0]) - 1:
             return False
 
         elif self.map[fhp[0]][fhp[1]] == '.':
@@ -274,14 +334,32 @@ class Dungeon():
             print('Congratulations you have sucessfully make it throught this level')
 
         elif self.map[fhp[0]][fhp[1]] == 'E':
-            # start fight
-            pass
+            f = Fight(self.hero, self.enemies_on_map[0])
+            result = f.commence()
+
+            if result:
+                print('Enemy vanquished!')
+                # moving Hero to enemies position after victory
+                self.map[fhp[0]][fhp[1]] = 'H'
+                self.map[fhp[0]][fhp[1] - 1] = '.'
+                self.hero_position = fhp
+
+                # removing vanquished enemy from dungeon's list of enemies
+                self.enemies_on_map.remove(self.enemies_on_map[0])
+
+                return True
+            else:
+                print(f'{self.hero.name} has been killed!')
+                # d.respawn(self.hero)
+                return False
+
         else:
             self.pick_treasure()
             self.map[fhp[0]][fhp[1] - 1] = '.'
             self.map[fhp[0]][fhp[1]] = 'H'
             self.hero_position = fhp
             self.hero.take_mana(self.hero.mana_regen_rate)
+            return True
 
     def pick_treasure(self):
         treasure = random.choice(self.treasure_on_map)
@@ -312,12 +390,10 @@ class Fight():
         self.enemy = enemy
 
     def heros_turn(self):
-        if self.hero.weapon is None and self.hero.spell is None:
-            print(f'{self.hero.name} is unequiped and cannot attack!')
 
-        elif self.hero.spell.damage >= self.hero.weapon.damage:
+        if self.hero.can_cast():
 
-            if self.hero.can_cast():
+            if self.hero.weapon is None or self.hero.spell.damage >= self.hero.weapon.damage:
                 dmg = self.hero.attack(by='magic')
                 self.enemy.take_damage(dmg)
                 print(f'{self.hero.name} casts {self.hero.spell.name}!')
@@ -326,24 +402,36 @@ class Fight():
             else:
                 dmg = self.hero.attack(by='weapon')
                 self.enemy.take_damage(dmg)
-                print(f'{self.hero.name} swings his {self.hero.weapon.name}!')
-                print(f'Enemy has {self.enemy.current_health} health left.')
+
+                if dmg == 0:
+                    print(f'{self.hero.name} is empty-handed and cannot attack!')
+                    print(f'Enemy is unscathed!')
+                else:
+                    print(f'{self.hero.name} swings his {self.hero.weapon.name}!')
+                    print(f'Enemy has {self.enemy.current_health} health left.')
 
         else:
             dmg = self.hero.attack(by='weapon')
             self.enemy.take_damage(dmg)
-            print(f'{self.hero.name} swings his {self.hero.weapon.name}!')
-            print(f'Enemy has {self.enemy.current_health} health left.')
+
+            if dmg == 0:
+                print(f'{self.hero.name} is empty-handed and cannot attack!')
+                print(f'Enemy is unscathed!')
+            else:
+                print(f'{self.hero.name} swings his {self.hero.weapon.name}!')
+                print(f'Enemy has {self.enemy.current_health} health left.')
 
     def baddies_turn(self):
-        if self.enemy.weapon is None and self.enemy.spell is None:
-            dmg = self.enemy.attack()
-            self.hero.take_damage(dmg)
-            print(f'    Enemy strikes {self.hero.name}!')
-            print(f'    {self.hero.name} has {self.hero.current_health} health left.')
 
-        elif self.enemy.spell.damage >= self.enemy.weapon.damage and self.enemy.spell.damage >= self.enemy.damage:
-            if self.enemy.can_cast():
+        if self.enemy.can_cast():
+
+            if self.enemy.weapon is None and self.enemy.spell.damage >= self.enemy.damage:
+                dmg = self.enemy.attack(by='magic')
+                self.hero.take_damage(dmg)
+                print(f'    Enemy casts {self.enemy.spell.name}!')
+                print(f'    {self.hero.name} has {self.hero.current_health} health left.')
+
+            elif self.enemy.spell.damage >= self.enemy.weapon and self.enemy.spell.damage >= self.enemy.damage:
                 dmg = self.enemy.attack(by='magic')
                 self.hero.take_damage(dmg)
                 print(f'    Enemy casts {self.enemy.spell.name}!')
@@ -361,35 +449,40 @@ class Fight():
                 print(f'    Enemy strikes {self.hero.name}!')
                 print(f'    {self.hero.name} has {self.hero.current_health} health left.')
 
-        elif self.enemy.weapon.damage > self.enemy.spell.damage and self.enemy.weapon.damage >= self.enemy.damage:
-            dmg = self.enemy.attack(by='weapon')
-            self.hero.take_damage(dmg)
-            print(f'    Enemy swings his {self.enemy.weapon.name}!')
-            print(f'    {self.hero. name} has {self.hero.current_health} health left.')
-
         else:
-            dmg = self.enemy.attack()
-            self.hero.take_damage(dmg)
-            print(f'    Enemy strikes {self.hero.name}!')
-            print(f'    {self.hero.name} has {self.hero.current_health} health left.')
+
+            if self.enemy.weapon is not None and self.enemy.weapon.damage >= self.enemy.damage:
+                dmg = self.enemy.attack(by='weapon')
+                self.hero.take_damage(dmg)
+                print(f'    Enemy swings his {self.enemy.weapon.name}!')
+                print(f'    {self.hero.name} has {self.hero.current_health} health left.')
+
+            else:
+                dmg = self.enemy.attack()
+                self.hero.take_damage(dmg)
+                print(f'    Enemy strikes {self.hero.name}!')
+                print(f'    {self.hero.name} has {self.hero.current_health} health left.')
 
     def commence(self):
 
         while self.hero.is_alive() and self.enemy.is_alive():
-            
+
             self.heros_turn()
 
             if not self.enemy.is_alive():
-                print('Ka-blaow!')
                 break
 
             self.baddies_turn()
 
-        return 'He ded.'
+        if self.hero.is_alive():
+            return True
+        else:
+            return False
 
 
 def main():
     pass
+
 
 if __name__ == '__main__':
     main()

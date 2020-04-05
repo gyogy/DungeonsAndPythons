@@ -30,7 +30,62 @@ class TestFightClass(unittest.TestCase):
         kopon = Fight(pesho, vrago)
 
         result = kopon.commence()
-        expected = 'He ded.'
+        expected = True
+        # if kopon.commence() returns True, hero has defeated enemy
+
+        self.assertEqual(result, expected)
+
+
+class TestDungeonClass(unittest.TestCase):
+
+    def test_a_fight_started_going_right_range_1(self):
+        d = Dungeon('levels/level0.txt')
+        gosho = Hero('Gosho', 'Tupoto', 40, 10, 2)
+        d.spawn(gosho)
+        d.move_hero('right')
+        d.move_hero('right')
+        d.move_hero('right')
+        d.move_hero('right')
+        d.move_hero('right')
+
+        result = d.hero.current_health
+        expected = 20
+
+        self.assertEqual(result, expected)
+
+    def test_a_fight_started_going_down_range_1(self):
+        d = Dungeon('levels/level00.txt')
+        tosho = Hero('Tosho', 'Ostroto', 40, 10, 2)
+        d.spawn(tosho)
+        d.move_hero('down')
+        d.move_hero('down')
+
+        result = d.hero.is_alive()
+        expected = False
+
+        self.assertEqual(result, expected)
+
+    def test_a_fight_started_going_up_range_1(self):
+        d = Dungeon('levels/level000.txt')
+        losho = Hero('Losho', 'Koftito', 40, 10, 2)
+        d.spawn(losho)
+        d.move_hero('up')
+        d.move_hero('up')
+
+        result = d.hero.is_alive()
+        expected = False
+
+        self.assertEqual(result, expected)
+
+    def test_a_fight_started_going_left_range_1(self):
+        d = Dungeon('levels/level0000.txt')
+        sasho = Hero('Sasho', 'Sushata', 40, 10, 2)
+        d.spawn(sasho)
+        d.move_hero('left')
+        d.move_hero('left')
+
+        result = d.hero.is_alive()
+        expected = False
 
         self.assertEqual(result, expected)
 
