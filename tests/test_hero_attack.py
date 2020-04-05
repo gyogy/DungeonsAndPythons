@@ -84,6 +84,19 @@ class TestDungeonClass(unittest.TestCase):
 
         self.assertEqual(result, expected)
 
+    def test_asd(self):
+        d = Dungeon('levels/level000.txt')
+        w = Weapon('Bow', 20, hit_range=2, verb='shoots')
+        gosho = Hero('Gosho', 'Tupoto', 40, 20, 2)
+        gosho.equip(w)
+        d.spawn(gosho)
+        d.print_map()
+
+        result = d.hero_attack('weapon', 'up')
+        expected = True
+
+        self.assertEqual(result, expected)
+
 
 if __name__ == '__main__':
     unittest.main()

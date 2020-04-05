@@ -107,10 +107,11 @@ class Enemy(Soul):
 
 class Weapon():
 
-    def __init__(self, name, damage, hit_range=1):
+    def __init__(self, name, damage, hit_range=0, verb='swings'):
         self.name = name
         self.damage = damage
         self.hit_range = hit_range
+        self.verb = verb
 
 
 class Spell():
@@ -421,6 +422,7 @@ class Dungeon():
                     for i in range(1, rng + 1):
 
                         if self.map[xy[0] + i][xy[1]] == 'E':
+
                             f = Fight(self.hero, self.enemies_on_map[0], i)
                             result = f.commence()
 
@@ -490,6 +492,99 @@ class Dungeon():
             else:
                 return f'{self.hero.name} is out of mana.'
 
+        elif by == 'weapon':
+            rng = self.hero.weapon.hit_range
+            xy = self.hero_position
+
+            if direction == 'right':
+
+                for i in range(1, rng + 1):
+
+                    if self.map[xy[0]][xy[1] + i] == 'E':
+                        f = Fight(self.hero, self.enemies_on_map[0], i)
+                        result = f.commence()
+
+                        if result:
+                            print('Enemy vanquished!')
+                            self.map[xy[0]][xy[1] + i] = '.'
+                            # removing vanquished enemy from dungeon's list of enemies
+                            self.enemies_on_map.remove(self.enemies_on_map[0])
+                            return True
+
+                        else:
+                            print(f'{self.hero.name} has been killed!')
+                            # d.respawn(self.hero)
+                            return False
+
+                else:
+                    return 'Noone in range.'
+
+            elif direction == 'down':
+                for i in range(1, rng + 1):
+
+                    if self.map[xy[0] + i][xy[1]] == 'E':
+                        f = Fight(self.hero, self.enemies_on_map[0], i)
+                        result = f.commence()
+
+                        if result:
+                            print('Enemy vanquished!')
+                            self.map[xy[0] + i][xy[1]] = '.'
+                            # removing vanquished enemy from dungeon's list of enemies
+                            self.enemies_on_map.remove(self.enemies_on_map[0])
+                            return True
+
+                        else:
+                            print(f'{self.hero.name} has been killed!')
+                            # d.respawn(self.hero)
+                            return False
+
+                else:
+                    return 'Noone in range.'
+
+            elif direction == 'left':
+                for i in range(1, rng + 1):
+
+                    if self.map[xy[0]][xy[1] - i] == 'E':
+                        f = Fight(self.hero, self.enemies_on_map[0], i)
+                        result = f.commence()
+
+                        if result:
+                            print('Enemy vanquished!')
+                            self.map[xy[0]][xy[1] - i] = '.'
+                            # removing vanquished enemy from dungeon's list of enemies
+                            self.enemies_on_map.remove(self.enemies_on_map[0])
+                            return True
+
+                        else:
+                            print(f'{self.hero.name} has been killed!')
+                            # d.respawn(self.hero)
+                            return False
+
+                else:
+                    return 'Noone in range.'
+
+            else:
+                for i in range(1, rng + 1):
+
+                    if self.map[xy[0] - i][xy[1]] == 'E':
+                        f = Fight(self.hero, self.enemies_on_map[0], i)
+                        result = f.commence()
+
+                        if result:
+                            print('Enemy vanquished!')
+                            self.map[xy[0] - i][xy[1]] = '.'
+                            # removing vanquished enemy from dungeon's list of enemies
+                            self.enemies_on_map.remove(self.enemies_on_map[0])
+                            return True
+
+                        else:
+                            print(f'{self.hero.name} has been killed!')
+                            # d.respawn(self.hero)
+                            return False
+
+                else:
+                    return 'Noone in range.'
+
 
 class Fight():
 
@@ -516,7 +611,7 @@ class Fight():
                     print(f'{self.hero.name} is empty-handed and cannot attack!')
                     print(f'Enemy is unscathed!')
                 else:
-                    print(f'{self.hero.name} swings his {self.hero.weapon.name}!')
+                    print(f'{self.hero.name} {self.hero.weapon.verb} his {self.hero.weapon.name}!')
                     print(f'Enemy has {self.enemy.current_health} health left.')
 
         else:
@@ -527,7 +622,7 @@ class Fight():
                 print(f'{self.hero.name} is empty-handed and cannot attack!')
                 print(f'Enemy is unscathed!')
             else:
-                print(f'{self.hero.name} swings his {self.hero.weapon.name}!')
+                print(f'{self.hero.name} {self.hero.weapon.verb} his {self.hero.weapon.name}!')
                 print(f'Enemy has {self.enemy.current_health} health left.')
 
     def baddies_turn(self):
