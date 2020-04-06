@@ -218,7 +218,7 @@ class Dungeon():
             else:
                 self.map[self.hero_position[0]][self.hero_position[1]] = '.'
                 print(f'{self.hero.name} has been killed!')
-                print(self.respawn(self.hero))
+                self.respawn()
 
         elif self.map[fhp[0]][fhp[1]] == 'G':
             self.map[self.hero_position[0]][self.hero_position[1]] = '.'
@@ -321,7 +321,7 @@ class Dungeon():
                 self.map[self.hero_position[0]][self.hero_position[1]] = '.'
                 print(f'{self.hero.name} has been killed!')
                 self.hero.current_health = 0
-                self.respawn(self.hero)
+                self.respawn()
                 return False
 
         else:
@@ -429,6 +429,7 @@ class Dungeon():
 
                     else:
                         print('Noone in range.')
+                        return False
 
                 elif direction == 'down':
 
@@ -454,6 +455,7 @@ class Dungeon():
 
                     else:
                         print('Noone in range.')
+                        return False
 
                 elif direction == 'left':
 
@@ -478,6 +480,7 @@ class Dungeon():
 
                     else:
                         print('Noone in range.')
+                        return False
 
                 else:
 
@@ -502,18 +505,21 @@ class Dungeon():
 
                     else:
                         print('Noone in range.')
+                        return False
 
             elif self.hero.spell is None:
                 print(f'{self.hero.name} doesn\'t know any spells.')
-                return
+                return False
             else:
                 print(f'{self.hero.name} is out of mana.')
-                return
+                return False
 
         elif by == 'weapon':
+
             if self.hero.weapon is None:
-                print(f'{self.hero.name} doesn\'t have weapon')
-                return
+                print(f'{self.hero.name} doesn\'t have aweapon')
+                return False
+
             rng = self.hero.weapon.hit_range
             xy = self.hero_position
 

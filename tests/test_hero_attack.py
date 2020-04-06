@@ -12,7 +12,7 @@ class TestDungeonClass(unittest.TestCase):
         d.spawn(gosho)
 
         result = d.hero_attack(by='magic', direction='right')
-        expected = 'Noone in range.'
+        expected = False
 
         self.assertEqual(result, expected)
 
@@ -23,7 +23,7 @@ class TestDungeonClass(unittest.TestCase):
         d.move_hero('right')
 
         result = d.hero_attack(by='magic', direction='right')
-        expected = 'Gosho doesn\'t know any spells.'
+        expected = False
 
         self.assertEqual(result, expected)
 
@@ -90,7 +90,6 @@ class TestDungeonClass(unittest.TestCase):
         gosho = Hero('Gosho', 'Tupoto', 40, 20, 2)
         gosho.equip(w)
         d.spawn(gosho)
-        d.print_map()
 
         result = d.hero_attack('weapon', 'up')
         expected = True
