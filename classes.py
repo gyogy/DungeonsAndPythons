@@ -90,6 +90,7 @@ class Soul():
 class Hero(Soul):
 
     def __init__(self, name, title, health, mana, mana_regen_rate):
+        #TODO: Validations
         self.name = name
         self.title = title
         super().__init__(health, mana)
@@ -211,14 +212,14 @@ class Dungeon():
                 self.map[fhp[0]][fhp[1]] = 'H'
                 self.map[fhp[0] + 1][fhp[1]] = '.'
                 self.hero_position = fhp
-
+                # TODO : regen mana
                 # removing vanquished enemy from dungeon's list of enemies
                 self.enemies_on_map.remove(self.enemies_on_map[0])
 
             else:
                 self.map[self.hero_position[0]][self.hero_position[1]] = '.'
                 print(f'{self.hero.name} has been killed!')
-                print(self.respawn(self.hero))
+                print(self.respawn())
 
         elif self.map[fhp[0]][fhp[1]] == 'G':
             self.map[self.hero_position[0]][self.hero_position[1]] = '.'
@@ -263,7 +264,7 @@ class Dungeon():
                 self.map[fhp[0]][fhp[1]] = 'H'
                 self.map[fhp[0] - 1][fhp[1]] = '.'
                 self.hero_position = fhp
-
+                # TODO : Regen mana
                 # removing vanquished enemy from dungeon's list of enemies
                 self.enemies_on_map.remove(self.enemies_on_map[0])
 
@@ -312,7 +313,7 @@ class Dungeon():
                 self.map[fhp[0]][fhp[1]] = 'H'
                 self.map[fhp[0]][fhp[1] + 1] = '.'
                 self.hero_position = fhp
-
+                # TODO : regen mana
                 # removing vanquished enemy from dungeon's list of enemies
                 self.enemies_on_map.remove(self.enemies_on_map[0])
 
@@ -361,7 +362,7 @@ class Dungeon():
                 self.map[fhp[0]][fhp[1]] = 'H'
                 self.map[fhp[0]][fhp[1] - 1] = '.'
                 self.hero_position = fhp
-
+                # TODO : Regen mana
                 # removing vanquished enemy from dungeon's list of enemies
                 self.enemies_on_map.remove(self.enemies_on_map[0])
                 return True
