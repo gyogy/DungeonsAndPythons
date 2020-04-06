@@ -8,8 +8,11 @@ def main():
     dungeon.move_right()
     dungeon.move_right()
     dungeon.print_map()
-    dungeon.hero.learn(Spell('CannonBall', 20, 10, 5))
-    dungeon.hero_attack(by='magic')
+    dungeon.move_right()
+    dungeon.move_right()
+    dungeon.move_right()
+    #dungeon.hero.learn(Spell('CannonBall', 20, 10, 5))
+    #dungeon.hero_attack(by='magic')
     dungeon.print_map()
 
 
