@@ -691,7 +691,36 @@ class Fight():
 
 
 def main():
-    pass
+    # dungeon = Dungeon('levels/level1.txt')
+    # dungeon.print_map()
+    # dungeon.spawn(Hero('Bobi', 'The Dragonslayer', 200, 100, 2))
+    # dungeon.print_map()
+    # dungeon.move_right()
+    # dungeon.move_down()
+    # dungeon.print_map()
+    # dungeon.move_down()
+    # dungeon.move_down()
+    # dungeon.move_right()
+    # dungeon.print_map()
+    # dungeon.move_right()
+    # dungeon.move_down()
+    # dungeon.print_map()
+    # dungeon.move_up()
+    # dungeon.move_right()
+    # dungeon.move_right()
+    # dungeon.move_up()
+    # dungeon.print_map()
+    # dungeon.move_up()
+    # dungeon.move_up()
+    # dungeon.move_right()
+    # dungeon.move_right()
+    # dungeon.move_right()
+    # dungeon.move_right()
+    # dungeon.print_map()
+    # dungeon.move_down()
+    # dungeon.move_down()
+    # dungeon.move_down()
+    # dungeon.move_down()
 
 
 if __name__ == '__main__':
