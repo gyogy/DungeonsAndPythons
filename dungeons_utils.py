@@ -19,7 +19,7 @@ def load_map(map_path):
 
 
 def check_if_dungeon_map_has_forbidden_symbols(dungeon_map):
-    forbidden_symbols = ['.', '#', 'E', 'H', 'T', 'G', 'S']
+    forbidden_symbols = ['.', '#', 'E', 'H', 'T', 'G', 'S', 'R']
     for level in dungeon_map:
         for square in level:
             if square not in forbidden_symbols:

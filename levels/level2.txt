@@ -1,0 +1,16 @@
+S....R...T..E
+#T#...###.#..
+#.###E###E..T
+#.E..R###..E.
+###T#####..TG
+--Treasures
+Spell, Fireball, 10, 2, 1
+Spell, Iceball, 5, 2, 1
+Weapon, Axe, 10
+Heal, 10
+Mana, 10
+--Enemies
+Enemy, 75, 20, 20
+Enemy, 75, 40, 20
+Enemy, 75, 30, 30
+--EOG

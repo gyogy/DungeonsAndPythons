@@ -149,17 +149,19 @@ class Dungeon():
         # When Hero moves from a square it becomes '.'
         return False
 
-    def respawn(self, hero):
-        self.hero = hero
+    def respawn(self):
+        hero = Hero(self.hero.name, self.hero.title, self.hero.health * 0.8, self.hero.mana * 0.8, self.hero.mana_regen_rate)
 
         for i in range(0, len(self.map)):
             for j in range(0, len(self.map[0])):
-                if self.map[i][j] == 'S':
+                if self.map[i][j] == 'R':
                     self.hero_position = (i, j)
+                    self.hero = hero
                     self.map[i][j] = 'H'
-                    return f'{self.hero.name} the {self.hero.title} has been respawned!'
+                    print(f'{self.hero.name} the {self.hero.title} has been respawned!')
+                    return
         # When Hero moves from a square it becomes '.'
-        return 'GAME OVER!'
+        print('GAME OVER!')
         '''TODO: when hero.is_alive() is False, this function should run.
         It should search the map for Ss and respawn the hero at the nearest one,
         or throw a GAME OVER if there are no more Ss on the map.
@@ -214,11 +216,14 @@ class Dungeon():
                 self.enemies_on_map.remove(self.enemies_on_map[0])
 
             else:
+                self.map[self.hero_position[0]][self.hero_position[1]] = '.'
                 print(f'{self.hero.name} has been killed!')
                 print(self.respawn(self.hero))
 
         elif self.map[fhp[0]][fhp[1]] == 'G':
+            self.map[self.hero_position[0]][self.hero_position[1]] = '.'
             print('Congratulations you have sucessfully made it throught this level')
+            return
         else:
             self.pick_treasure()
             self.map[fhp[0] + 1][fhp[1]] = '.'
@@ -244,7 +249,9 @@ class Dungeon():
             return False
 
         elif self.map[fhp[0]][fhp[1]] == 'G':
-            print('Congratulations you have sucessfully make it throught this level')
+            self.map[self.hero_position[0]][self.hero_position[1]] = '.'
+            print('GG. You won! :)')
+            return
 
         elif self.map[fhp[0]][fhp[1]] == 'E':
             f = Fight(self.hero, self.enemies_on_map[0])
@@ -262,9 +269,10 @@ class Dungeon():
 
                 return True
             else:
+                self.map[self.hero_position[0]][self.hero_position[1]] = '.'
                 print(f'{self.hero.name} has been killed!')
                 self.hero.current_health = 0
-                # d.respawn(self.hero)
+                self.respawn()
                 return False
 
         else:
@@ -289,7 +297,7 @@ class Dungeon():
             return True
 
         elif self.map[fhp[0]][fhp[1]] == 'G':
-            print('Congratulations you have sucessfully make it throught this level')
+            print('GG! You won! :)')
 
         elif self.map[fhp[0]][fhp[1]] == '#':
             return False
@@ -310,9 +318,10 @@ class Dungeon():
 
                 return True
             else:
+                self.map[self.hero_position[0]][self.hero_position[1]] = '.'
                 print(f'{self.hero.name} has been killed!')
                 self.hero.current_health = 0
-                # d.respawn(self.hero)
+                self.respawn(self.hero)
                 return False
 
         else:
@@ -338,7 +347,9 @@ class Dungeon():
             return False
 
         elif self.map[fhp[0]][fhp[1]] == 'G':
-            print('Congratulations you have sucessfully make it throught this level')
+            self.map[self.hero_position[0]][self.hero_position[1]] = '.'
+            print('GG! You won! :)')
+            return
 
         elif self.map[fhp[0]][fhp[1]] == 'E':
             f = Fight(self.hero, self.enemies_on_map[0])
@@ -356,8 +367,9 @@ class Dungeon():
                 return True
 
             else:
+                self.map[self.hero_position[0]][self.hero_position[1]] = '.'
                 print(f'{self.hero.name} has been killed!')
-                # d.respawn(self.hero)
+                self.respawn()
                 return False
 
         else:
@@ -410,12 +422,13 @@ class Dungeon():
                                 return True
 
                             else:
+                                self.map[self.hero_position[0]][self.hero_position[1]] = '.'
                                 print(f'{self.hero.name} has been killed!')
-                                # d.respawn(self.hero)
+                                self.respawn()
                                 return False
 
                     else:
-                        return 'Noone in range.'
+                        print('Noone in range.')
 
                 elif direction == 'down':
 
@@ -434,12 +447,13 @@ class Dungeon():
                                 return True
 
                             else:
+                                self.map[self.hero_position[0]][self.hero_position[1]] = '.'
                                 print(f'{self.hero.name} has been killed!')
-                                # d.respawn(self.hero)
+                                self.respawn()
                                 return False
 
                     else:
-                        return 'Noone in range.'
+                        print('Noone in range.')
 
                 elif direction == 'left':
 
@@ -457,12 +471,13 @@ class Dungeon():
                                 return True
 
                             else:
+                                self.map[self.hero_position[0]][self.hero_position[1]] = '.'
                                 print(f'{self.hero.name} has been killed!')
-                                # d.respawn(self.hero)
+                                self.respawn()
                                 return False
 
                     else:
-                        return 'Noone in range.'
+                        print('Noone in range.')
 
                 else:
 
@@ -480,19 +495,25 @@ class Dungeon():
                                 return True
 
                             else:
+                                self.map[self.hero_position[0]][self.hero_position[1]] = '.'
                                 print(f'{self.hero.name} has been killed!')
-                                # d.respawn(self.hero)
+                                self.respawn()
                                 return False
 
                     else:
-                        return 'Noone in range.'
+                        print('Noone in range.')
 
             elif self.hero.spell is None:
-                return f'{self.hero.name} doesn\'t know any spells.'
+                print(f'{self.hero.name} doesn\'t know any spells.')
+                return
             else:
-                return f'{self.hero.name} is out of mana.'
+                print(f'{self.hero.name} is out of mana.')
+                return
 
         elif by == 'weapon':
+            if self.hero.weapon is None:
+                print(f'{self.hero.name} doesn\'t have weapon')
+                return
             rng = self.hero.weapon.hit_range
             xy = self.hero_position
 
@@ -512,12 +533,13 @@ class Dungeon():
                             return True
 
                         else:
+                            self.map[self.hero_position[0]][self.hero_position[1]] = '.'
                             print(f'{self.hero.name} has been killed!')
-                            # d.respawn(self.hero)
+                            self.respawn()
                             return False
 
                 else:
-                    return 'Noone in range.'
+                    print('Noone in range.')
 
             elif direction == 'down':
                 for i in range(1, rng + 1):
@@ -535,11 +557,11 @@ class Dungeon():
 
                         else:
                             print(f'{self.hero.name} has been killed!')
-                            # d.respawn(self.hero)
+                            self.respawn()
                             return False
 
                 else:
-                    return 'Noone in range.'
+                    print('Noone in range.')
 
             elif direction == 'left':
                 for i in range(1, rng + 1):
@@ -557,11 +579,11 @@ class Dungeon():
 
                         else:
                             print(f'{self.hero.name} has been killed!')
-                            # d.respawn(self.hero)
+                            self.respawn()
                             return False
 
                 else:
-                    return 'Noone in range.'
+                    print('Noone in range.')
 
             else:
                 for i in range(1, rng + 1):
@@ -578,12 +600,13 @@ class Dungeon():
                             return True
 
                         else:
+                            self.map[self.hero_position[0]][self.hero_position[1]] = '.'
                             print(f'{self.hero.name} has been killed!')
-                            # d.respawn(self.hero)
+                            self.respawn()
                             return False
 
                 else:
-                    return 'Noone in range.'
+                    print('Noone in range.')
 
 
 class Fight():
@@ -690,9 +713,3 @@ class Fight():
             return False
 
 
-def main():
-    pass
-
-
-if __name__ == '__main__':
-    main()
