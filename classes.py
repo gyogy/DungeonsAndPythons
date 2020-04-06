@@ -107,10 +107,11 @@ class Enemy(Soul):
 
 class Weapon():
 
-    def __init__(self, name, damage, hit_range=1):
+    def __init__(self, name, damage, hit_range=0, verb='swings'):
         self.name = name
         self.damage = damage
         self.hit_range = hit_range
+        self.verb = verb
 
 
 class Spell():
@@ -352,8 +353,8 @@ class Dungeon():
 
                 # removing vanquished enemy from dungeon's list of enemies
                 self.enemies_on_map.remove(self.enemies_on_map[0])
-
                 return True
+
             else:
                 print(f'{self.hero.name} has been killed!')
                 # d.respawn(self.hero)
@@ -385,21 +386,218 @@ class Dungeon():
         else:
             raise ValueError('Invalid treasure type')
 
-    def hero_attack(self, by):
-        pass
+    def hero_attack(self, by='magic', direction='right'):
+        if by == 'magic':
+
+            if self.hero.can_cast():
+                rng = self.hero.spell.cast_range
+                xy = self.hero_position
+
+                if direction == 'right':
+
+                    for i in range(1, rng + 1):
+
+                        if self.map[xy[0]][xy[1] + i] == 'E':
+
+                            f = Fight(self.hero, self.enemies_on_map[0], i)
+                            result = f.commence()
+
+                            if result:
+                                print('Enemy vanquished!')
+                                self.map[xy[0]][xy[1] + i] = '.'
+                                # removing vanquished enemy from dungeon's list of enemies
+                                self.enemies_on_map.remove(self.enemies_on_map[0])
+                                return True
+
+                            else:
+                                print(f'{self.hero.name} has been killed!')
+                                # d.respawn(self.hero)
+                                return False
+
+                    else:
+                        return 'Noone in range.'
+
+                elif direction == 'down':
+
+                    for i in range(1, rng + 1):
+
+                        if self.map[xy[0] + i][xy[1]] == 'E':
+
+                            f = Fight(self.hero, self.enemies_on_map[0], i)
+                            result = f.commence()
+
+                            if result:
+                                print('Enemy vanquished!')
+                                self.map[xy[0] + 1][xy[1]] = '.'
+                                # removing vanquished enemy from dungeon's list of enemies
+                                self.enemies_on_map.remove(self.enemies_on_map[0])
+                                return True
+
+                            else:
+                                print(f'{self.hero.name} has been killed!')
+                                # d.respawn(self.hero)
+                                return False
+
+                    else:
+                        return 'Noone in range.'
+
+                elif direction == 'left':
+
+                    for i in range(1, rng + 1):
+
+                        if self.map[xy[0]][xy[1] - i] == 'E':
+                            f = Fight(self.hero, self.enemies_on_map[0], i)
+                            result = f.commence()
+
+                            if result:
+                                print('Enemy vanquished!')
+                                self.map[xy[0]][xy[1] - i] = '.'
+                                # removing vanquished enemy from dungeon's list of enemies
+                                self.enemies_on_map.remove(self.enemies_on_map[0])
+                                return True
+
+                            else:
+                                print(f'{self.hero.name} has been killed!')
+                                # d.respawn(self.hero)
+                                return False
+
+                    else:
+                        return 'Noone in range.'
+
+                else:
+
+                    for i in range(1, rng + 1):
+
+                        if self.map[xy[0] - i][xy[1]] == 'E':
+                            f = Fight(self.hero, self.enemies_on_map[0], i)
+                            result = f.commence()
+
+                            if result:
+                                print('Enemy vanquished!')
+                                self.map[xy[0] - i][xy[1]] = '.'
+                                # removing vanquished enemy from dungeon's list of enemies
+                                self.enemies_on_map.remove(self.enemies_on_map[0])
+                                return True
+
+                            else:
+                                print(f'{self.hero.name} has been killed!')
+                                # d.respawn(self.hero)
+                                return False
+
+                    else:
+                        return 'Noone in range.'
+
+            elif self.hero.spell is None:
+                return f'{self.hero.name} doesn\'t know any spells.'
+            else:
+                return f'{self.hero.name} is out of mana.'
+
+        elif by == 'weapon':
+            rng = self.hero.weapon.hit_range
+            xy = self.hero_position
+
+            if direction == 'right':
+
+                for i in range(1, rng + 1):
+
+                    if self.map[xy[0]][xy[1] + i] == 'E':
+                        f = Fight(self.hero, self.enemies_on_map[0], i)
+                        result = f.commence()
+
+                        if result:
+                            print('Enemy vanquished!')
+                            self.map[xy[0]][xy[1] + i] = '.'
+                            # removing vanquished enemy from dungeon's list of enemies
+                            self.enemies_on_map.remove(self.enemies_on_map[0])
+                            return True
+
+                        else:
+                            print(f'{self.hero.name} has been killed!')
+                            # d.respawn(self.hero)
+                            return False
+
+                else:
+                    return 'Noone in range.'
+
+            elif direction == 'down':
+                for i in range(1, rng + 1):
+
+                    if self.map[xy[0] + i][xy[1]] == 'E':
+                        f = Fight(self.hero, self.enemies_on_map[0], i)
+                        result = f.commence()
+
+                        if result:
+                            print('Enemy vanquished!')
+                            self.map[xy[0] + i][xy[1]] = '.'
+                            # removing vanquished enemy from dungeon's list of enemies
+                            self.enemies_on_map.remove(self.enemies_on_map[0])
+                            return True
+
+                        else:
+                            print(f'{self.hero.name} has been killed!')
+                            # d.respawn(self.hero)
+                            return False
+
+                else:
+                    return 'Noone in range.'
+
+            elif direction == 'left':
+                for i in range(1, rng + 1):
+
+                    if self.map[xy[0]][xy[1] - i] == 'E':
+                        f = Fight(self.hero, self.enemies_on_map[0], i)
+                        result = f.commence()
+
+                        if result:
+                            print('Enemy vanquished!')
+                            self.map[xy[0]][xy[1] - i] = '.'
+                            # removing vanquished enemy from dungeon's list of enemies
+                            self.enemies_on_map.remove(self.enemies_on_map[0])
+                            return True
+
+                        else:
+                            print(f'{self.hero.name} has been killed!')
+                            # d.respawn(self.hero)
+                            return False
+
+                else:
+                    return 'Noone in range.'
+
+            else:
+                for i in range(1, rng + 1):
+
+                    if self.map[xy[0] - i][xy[1]] == 'E':
+                        f = Fight(self.hero, self.enemies_on_map[0], i)
+                        result = f.commence()
+
+                        if result:
+                            print('Enemy vanquished!')
+                            self.map[xy[0] - i][xy[1]] = '.'
+                            # removing vanquished enemy from dungeon's list of enemies
+                            self.enemies_on_map.remove(self.enemies_on_map[0])
+                            return True
+
+                        else:
+                            print(f'{self.hero.name} has been killed!')
+                            # d.respawn(self.hero)
+                            return False
+
+                else:
+                    return 'Noone in range.'
 
 
 class Fight():
 
-    def __init__(self, hero, enemy):
+    def __init__(self, hero, enemy, distance=0):
         self.hero = hero
         self.enemy = enemy
+        self.distance = distance
 
     def heros_turn(self):
 
         if self.hero.can_cast():
 
-            if self.hero.weapon is None or self.hero.spell.damage >= self.hero.weapon.damage:
+            if self.hero.weapon is None or self.hero.spell.damage >= self.hero.weapon.damage or self.distance > 0:
                 dmg = self.hero.attack(by='magic')
                 self.enemy.take_damage(dmg)
                 print(f'{self.hero.name} casts {self.hero.spell.name}!')
@@ -413,7 +611,7 @@ class Fight():
                     print(f'{self.hero.name} is empty-handed and cannot attack!')
                     print(f'Enemy is unscathed!')
                 else:
-                    print(f'{self.hero.name} swings his {self.hero.weapon.name}!')
+                    print(f'{self.hero.name} {self.hero.weapon.verb} his {self.hero.weapon.name}!')
                     print(f'Enemy has {self.enemy.current_health} health left.')
 
         else:
@@ -424,50 +622,56 @@ class Fight():
                 print(f'{self.hero.name} is empty-handed and cannot attack!')
                 print(f'Enemy is unscathed!')
             else:
-                print(f'{self.hero.name} swings his {self.hero.weapon.name}!')
+                print(f'{self.hero.name} {self.hero.weapon.verb} his {self.hero.weapon.name}!')
                 print(f'Enemy has {self.enemy.current_health} health left.')
 
     def baddies_turn(self):
+        if self.distance == 0:
 
-        if self.enemy.can_cast():
+            if self.enemy.can_cast():
 
-            if self.enemy.weapon is None and self.enemy.spell.damage >= self.enemy.damage:
-                dmg = self.enemy.attack(by='magic')
-                self.hero.take_damage(dmg)
-                print(f'    Enemy casts {self.enemy.spell.name}!')
-                print(f'    {self.hero.name} has {self.hero.current_health} health left.')
+                if self.enemy.weapon is None and self.enemy.spell.damage >= self.enemy.damage:
+                    dmg = self.enemy.attack(by='magic')
+                    self.hero.take_damage(dmg)
+                    print(f'    Enemy casts {self.enemy.spell.name}!')
+                    print(f'    {self.hero.name} has {self.hero.current_health} health left.')
 
-            elif self.enemy.spell.damage >= self.enemy.weapon and self.enemy.spell.damage >= self.enemy.damage:
-                dmg = self.enemy.attack(by='magic')
-                self.hero.take_damage(dmg)
-                print(f'    Enemy casts {self.enemy.spell.name}!')
-                print(f'    {self.hero.name} has {self.hero.current_health} health left.')
+                elif self.enemy.spell.damage >= self.enemy.weapon and self.enemy.spell.damage >= self.enemy.damage:
+                    dmg = self.enemy.attack(by='magic')
+                    self.hero.take_damage(dmg)
+                    print(f'    Enemy casts {self.enemy.spell.name}!')
+                    print(f'    {self.hero.name} has {self.hero.current_health} health left.')
 
-            elif self.enemy.weapon.damage >= self.enemy.damage:
-                dmg = self.enemy.attack(by='weapon')
-                self.hero.take_damage(dmg)
-                print(f'    Enemy swings his {self.enemy.weapon.name}!')
-                print(f'    {self.hero.name} has {self.hero.current_health} health left.')
+                elif self.enemy.weapon.damage >= self.enemy.damage:
+                    dmg = self.enemy.attack(by='weapon')
+                    self.hero.take_damage(dmg)
+                    print(f'    Enemy swings his {self.enemy.weapon.name}!')
+                    print(f'    {self.hero.name} has {self.hero.current_health} health left.')
+
+                else:
+                    dmg = self.enemy.attack()
+                    self.hero.take_damage(dmg)
+                    print(f'    Enemy strikes {self.hero.name}!')
+                    print(f'    {self.hero.name} has {self.hero.current_health} health left.')
 
             else:
-                dmg = self.enemy.attack()
-                self.hero.take_damage(dmg)
-                print(f'    Enemy strikes {self.hero.name}!')
-                print(f'    {self.hero.name} has {self.hero.current_health} health left.')
+
+                if self.enemy.weapon is not None and self.enemy.weapon.damage >= self.enemy.damage:
+                    dmg = self.enemy.attack(by='weapon')
+                    self.hero.take_damage(dmg)
+                    print(f'    Enemy swings his {self.enemy.weapon.name}!')
+                    print(f'    {self.hero.name} has {self.hero.current_health} health left.')
+
+                else:
+                    dmg = self.enemy.attack()
+                    self.hero.take_damage(dmg)
+                    print(f'    Enemy strikes {self.hero.name}!')
+                    print(f'    {self.hero.name} has {self.hero.current_health} health left.')
 
         else:
-
-            if self.enemy.weapon is not None and self.enemy.weapon.damage >= self.enemy.damage:
-                dmg = self.enemy.attack(by='weapon')
-                self.hero.take_damage(dmg)
-                print(f'    Enemy swings his {self.enemy.weapon.name}!')
-                print(f'    {self.hero.name} has {self.hero.current_health} health left.')
-
-            else:
-                dmg = self.enemy.attack()
-                self.hero.take_damage(dmg)
-                print(f'    Enemy strikes {self.hero.name}!')
-                print(f'    {self.hero.name} has {self.hero.current_health} health left.')
+            self.distance -= 1
+            print(f'    Enemy moves towards {self.hero.name} to get in range.')
+            print(f'    He\'s {self.distance} tiles away.')
 
     def commence(self):
 

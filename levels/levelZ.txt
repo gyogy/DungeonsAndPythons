@@ -1,0 +1,8 @@
+######
+S..E.G
+######
+--Treasures
+Weapon, Axe, 10
+--Enemies
+Enemy, 40, 1, 10
+--EOG
